@@ -3,7 +3,9 @@
 /* 左側:メーター(タップで種類を切り替え) */
 .meter-gauge {
   flex-shrink: 0;
-  height: 100%;
+  width: 34.4rem;
+  max-height: 100%;
+  align-self: center;
   aspect-ratio: 1 / 1;
   padding: 0;
   border: none;
@@ -13,12 +15,7 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.meter-gauge svg { 
-  width: 34.4rem;
-  max-height: 100%;
-  align-self: center;
-  aspect-ratio: 1 / 1;
-}
+.meter-gauge svg { display: block; width: 100%; height: 100%; }
 
 /* 右側 */
 .meter-side { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 1.6rem; }
