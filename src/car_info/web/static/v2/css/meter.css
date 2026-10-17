@@ -25,10 +25,16 @@
 .meter-speed-unit { font-size: 1.8rem; color: var(--sub); }
 
 .meter-speed-right { display: flex; align-items: center; gap: 1.2rem; }
-.meter-gps { display: flex; align-items: baseline; gap: 0.4rem; font-size: 1.4rem; color: var(--sub); white-space: nowrap; }
-.meter-gps-value { font-size: 2.2rem; font-weight: 600; color: var(--text); }
+
+/* 速度とGPS速度(枠で囲んだ測定値風) */
+.meter-speed-left { display: flex; align-items: center; gap: 1.6rem; }
+.meter-gps { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 1rem; border: 0.2rem solid var(--sub); border-radius: 0.8rem; white-space: nowrap; }
+.meter-gps-label { padding: 0.1rem 0.5rem; border-radius: 0.3rem; background: var(--sub); color: #000000; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.06em; }
+.meter-gps-value { font-size: 2.8rem; font-weight: 600; line-height: 1; color: var(--text); }
 .meter-gps-unit { font-size: 1.3rem; color: var(--sub); }
 
+/* 車両電圧 */
 .meter-volt { display: flex; align-items: baseline; gap: 0.4rem; white-space: nowrap; }
+.meter-volt-label { font-size: 1.2rem; color: var(--sub); }
 .meter-volt-value { font-size: 3.6rem; font-weight: 600; }
 .meter-volt-unit { font-size: 1.4rem; color: var(--sub); }

@@ -45,17 +45,21 @@ export default {
     const speedRow = document.createElement("div");
     speedRow.className = "meter-speed";
     speedRow.innerHTML = `
-      <div class="meter-speed-line">
-        <span class="label">速度</span>
-        <span class="meter-speed-value num">${fixedWidth("--", 3)}</span>
-        <span class="meter-speed-unit num">km/h</span>
-      </div>
-      <div class="meter-speed-right">
-        <span class="meter-gps">GPS
+      <div class="meter-speed-left">
+        <div class="meter-speed-line">
+          <span class="label">速度</span>
+          <span class="meter-speed-value num">${fixedWidth("--", 3)}</span>
+          <span class="meter-speed-unit num">km/h</span>
+        </div>
+        <span class="meter-gps">
+          <span class="meter-gps-label">GPS</span>
           <span class="meter-gps-value num">${fixedWidth("--", 3)}</span>
           <span class="meter-gps-unit num">km/h</span>
         </span>
+      </div>
+      <div class="meter-speed-right">
         <span class="meter-volt">
+          <span class="meter-volt-label">車両電圧</span>
           <span class="meter-volt-value num">${fixedWidth("--.-", 4)}</span>
           <span class="meter-volt-unit num">V</span>
         </span>
