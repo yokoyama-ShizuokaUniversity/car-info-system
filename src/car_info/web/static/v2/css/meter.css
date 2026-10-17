@@ -13,7 +13,12 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-.meter-gauge svg { display: block; width: 100%; height: min(100%, 34.4rem); }
+.meter-gauge svg { 
+  width: 34.4rem;
+  max-height: 100%;
+  align-self: center;
+  aspect-ratio: 1 / 1;
+}
 
 /* 右側 */
 .meter-side { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 1.6rem; }
