@@ -19,7 +19,9 @@ export function createChips(keys) {
   function update(d) {
     if (!d) return;
     for (const p of parts) {
-      p.value.textContent = formatItem(p.key, d[p.key]);
+      const v = d[p.key];
+      p.value.textContent = formatItem(p.key, v);
+      p.value.style.color = p.item.tone ? p.item.tone(v, d) : "";
       const note = p.item.note ? p.item.note(d) : "";
       p.unit.textContent = note ? `${p.item.unit}・${note}` : p.item.unit;
     }

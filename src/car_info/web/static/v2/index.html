@@ -13,6 +13,11 @@
   <div class="status">
     <span class="conn"><span class="status-dot" id="status-dot"></span><span id="status-text">接続待ち</span></span>
     <span>区間 <span class="num" id="trip">--</span> km</span>
+    <span>電圧 <span class="num" id="volt">--</span> V
+      <svg class="charge-icon" id="charge-icon" viewBox="0 0 12 16" role="img" aria-label="充電中">
+        <path d="M7 0 L1 9 H5.5 L4.5 16 L11 6.5 H6.5 Z" fill="currentColor"></path>
+      </svg>
+    </span>
   </div>
   <div class="dots" id="dots" aria-hidden="true"></div>
   <div class="footer-right">

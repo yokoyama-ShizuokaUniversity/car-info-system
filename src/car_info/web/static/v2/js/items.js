@@ -17,8 +17,8 @@ export const ITEMS = {
   RELATIVE_THROTTLE_POS: { label: "相対スロットル開度", unit: "%", format: 0 },
   THROTTLE_ACTUATOR: { label: "スロットル指令値", unit: "%", format: 0 },
   ENGINE_LOAD: { label: "エンジン負荷", unit: "%", format: 0 },
-  CONTROL_MODULE_VOLTAGE: { label: "車両電圧", unit: "V", format: 1, note: voltageNote },
-  COOLANT_TEMP: { label: "水温", unit: "℃", format: 0 },
+  CONTROL_MODULE_VOLTAGE: { label: "車両電圧", unit: "V", format: 1 },
+  COOLANT_TEMP: { label: "水温", unit: "℃", format: 0, tone: coolantTone },
   INTAKE_TEMP: { label: "吸気温", unit: "℃", format: 0 },
   INTAKE_PRESSURE: { label: "吸気圧", unit: "kPa", format: 0 },
   BAROMETRIC_PRESSURE: { label: "大気圧", unit: "kPa", format: 0 },
@@ -41,11 +41,15 @@ export const ITEMS = {
   gps_hdop: { label: "測位精度(HDOP)", unit: "", format: 1 },
 };
 
-// 車両電圧の状態(エンジン回転中のみ表示)
-function voltageNote(d) {
-  const v = d.CONTROL_MODULE_VOLTAGE;
-  if (isEmpty(v) || !(d.RPM > 0)) return "";
-  return v >= 13.5 ? "充電中" : "充電制御中";
+// 水温の色(しきい値は目安。実車の値を見て調整する)
+export const COOLANT_COLD = 60;   // これ未満は暖機中(青)[℃]
+export const COOLANT_HOT = 105;   // これ以上は高温(赤)[℃]
+
+function coolantTone(v) {
+  if (isEmpty(v)) return "";
+  if (v < COOLANT_COLD) return "var(--good)";
+  if (v >= COOLANT_HOT) return "var(--hot)";
+  return "";
 }
 
 export function isEmpty(v) {

@@ -17,7 +17,7 @@ const CHIPS_KEY = "car-info-v2-chips";
 const CHIP_COUNTS = [2, 3, 4];
 const DEFAULT_CHIPS = {
   count: 3,
-  keys: ["trip_kmpl", "CONTROL_MODULE_VOLTAGE", "COOLANT_TEMP", "accel_pct"],
+  keys: ["COOLANT_TEMP", "accel_pct", "ENGINE_LOAD", "obd_cycle_sec"],
 };
 
 function loadChips() {

@@ -6,6 +6,7 @@ import meter from "./pages/meter.js";
 const PAGES = [meter];
 
 const STALE_MS = 5000; // OBDの値がこの時間更新されなければ「停止中」とみなす
+const CHARGE_VOLT = 13.5;
 const $ = (id) => document.getElementById(id);
 
 // ページを並べ、ページ位置の点を作る
@@ -63,6 +64,9 @@ function updateFooter(d) {
   $("status-text").textContent = text;
   $("status-dot").classList.toggle("ok", ok);
   if (d) $("trip").textContent = fmt(d.trip_km, 1);
+  if (d) $("volt").textContent = fmt(d.CONTROL_MODULE_VOLTAGE, 1);
+  const charging = !!d && d.RPM > 0 && d.CONTROL_MODULE_VOLTAGE >= CHARGE_VOLT;
+  $("charge-icon").classList.toggle("on", charging);
   const gps = gpsStatus(d);
   $("gps-text").textContent = gps.text;
   $("gps-dot").classList.toggle("ok", gps.level === "ok");
