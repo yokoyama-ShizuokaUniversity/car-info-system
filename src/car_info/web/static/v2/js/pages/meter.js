@@ -1,4 +1,4 @@
-import { fmt, ITEMS } from "../items.js";
+import { fmt, fixedWidth, ITEMS } from "../items.js";
 import { createFuelGauge } from "../widgets/fuel.js";
 import { createChips } from "../widgets/chips.js";
 import { createIdleIcon } from "../widgets/idle-icon.js";
@@ -47,12 +47,17 @@ export default {
     speedRow.innerHTML = `
       <div class="meter-speed-line">
         <span class="label">速度</span>
-        <span class="meter-speed-value num">--</span>
+        <span class="meter-speed-value num">${fixedWidth("--", 3)}</span>
         <span class="meter-speed-unit num">km/h</span>
-        <span class="meter-gps">GPS <span class="meter-gps-value num">--</span></span>
+      </div>
+      <div class="meter-speed-right">
+        <span class="meter-gps">GPS
+          <span class="meter-gps-value num">${fixedWidth("--", 3)}</span>
+          <span class="meter-gps-unit num">km/h</span>
+        </span>
       </div>`;
     const idle = createIdleIcon();
-    speedRow.appendChild(idle.el);
+    speedRow.querySelector(".meter-speed-right").appendChild(idle.el);
     const fuel = createFuelGauge();
     let chipSetting = loadChips();
     let chips = createChips(chipSetting.keys.slice(0, chipSetting.count));
@@ -98,8 +103,8 @@ export default {
         if (!d) return;
         last = d;
         gauge.update(d);
-        speedValue.textContent = fmt(d.SPEED, 0);
-        gpsValue.textContent = d.gps_fix ? fmt(d.gps_speed, 0) : "--";
+        speedValue.textContent = fixedWidth(fmt(d.SPEED, 0), 3);
+        gpsValue.textContent = fixedWidth(d.gps_fix ? fmt(d.gps_speed, 0) : "--", 3);
         idle.update(d);
         fuel.update(d);
         chips.update(d);

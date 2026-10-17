@@ -87,3 +87,10 @@ export function formatItem(key, v) {
   if (format === "int") return fmtInt(v);
   return fmt(v, format);
 }
+
+const FIGURE_SPACE = "\u2007"; // 数字と同じ幅の空白
+
+// 桁数を固定して表示する(足りない分を数字と同じ幅の空白で左側に埋める)
+export function fixedWidth(text, width) {
+  return String(text).padStart(width, FIGURE_SPACE);
+}

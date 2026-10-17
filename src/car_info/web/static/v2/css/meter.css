@@ -22,5 +22,7 @@
 .meter-speed-value { font-size: 5.6rem; font-weight: 600; line-height: 1; }
 .meter-speed-unit { font-size: 1.8rem; color: var(--sub); }
 
-.meter-gps { margin-left: 1.2rem; font-size: 1.4rem; color: var(--sub); }
+.meter-speed-right { display: flex; align-items: center; gap: 1.2rem; }
+.meter-gps { display: flex; align-items: baseline; gap: 0.4rem; font-size: 1.4rem; color: var(--sub); white-space: nowrap; }
 .meter-gps-value { font-size: 2.2rem; font-weight: 600; color: var(--text); }
+.meter-gps-unit { font-size: 1.3rem; color: var(--sub); }
