@@ -55,6 +55,10 @@ export default {
           <span class="meter-gps-value num">${fixedWidth("--", 3)}</span>
           <span class="meter-gps-unit num">km/h</span>
         </span>
+        <span class="meter-volt">
+          <span class="meter-volt-value num">${fixedWidth("--.-", 4)}</span>
+          <span class="meter-volt-unit num">V</span>
+        </span>
       </div>`;
     const idle = createIdleIcon();
     speedRow.querySelector(".meter-speed-right").appendChild(idle.el);
@@ -64,6 +68,7 @@ export default {
     side.append(speedRow, fuel.el, chips.el);
     const speedValue = el.querySelector(".meter-speed-value");
     const gpsValue = el.querySelector(".meter-gps-value");
+    const voltValue = el.querySelector(".meter-volt-value");
     function rebuildChips(next) {
       chipSetting = next;
       saveSetting(CHIPS_KEY, next);
@@ -105,6 +110,7 @@ export default {
         gauge.update(d);
         speedValue.textContent = fixedWidth(fmt(d.SPEED, 0), 3);
         gpsValue.textContent = fixedWidth(d.gps_fix ? fmt(d.gps_speed, 0) : "--", 3);
+        voltValue.textContent = fixedWidth(fmt(d.CONTROL_MODULE_VOLTAGE, 1), 4);
         idle.update(d);
         fuel.update(d);
         chips.update(d);

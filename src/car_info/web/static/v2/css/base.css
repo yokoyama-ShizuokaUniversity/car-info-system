@@ -29,7 +29,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  padding: 1.6rem max(2.8rem, env(safe-area-inset-right)) 1rem max(2.8rem, env(safe-area-inset-left));
+  padding: 1.2rem max(2.8rem, env(safe-area-inset-right)) 1rem max(2.8rem, env(safe-area-inset-left));
   background: var(--bg);
   color: var(--text);
   font-family: "Noto Sans JP", "Noto Sans CJK JP", "Hiragino Sans", sans-serif;
@@ -47,15 +47,17 @@ body {
 .page { flex: 0 0 100%; min-width: 0; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; }
 
 /* 下端の帯 */
-.footer { height: 3rem; flex-shrink: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; border-top: 1px solid var(--line); font-size: 1.3rem; color: var(--sub); }
-.status { display: flex; align-items: center; gap: 1.8rem; }
-.conn { display: flex; align-items: center; gap: 0.8rem; }
-.status-dot { width: 0.8rem; height: 0.8rem; border-radius: 50%; background: var(--bad); }
+.footer { height: 4.2rem; flex-shrink: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; border-top: 1px solid var(--line); font-size: 1.7rem; color: var(--sub); }
+.status { display: flex; align-items: center; gap: 2.4rem; }
+.conn { display: flex; align-items: center; gap: 1rem; }
+.status-dot { width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--bad); }
 .status-dot.ok { background: var(--good); }
-.dots { display: flex; justify-content: center; gap: 0.8rem; }
-.dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--dot-off); }
+.status-dot.wait { background: var(--mid); }
+.dots { display: flex; justify-content: center; gap: 1rem; }
+.dot { width: 0.9rem; height: 0.9rem; border-radius: 50%; background: var(--dot-off); }
 .dot.active { background: var(--text); }
-.clock { font-size: 1.6rem; }
+.footer-right { justify-self: end; display: flex; align-items: center; gap: 2.4rem; }
+.clock { font-size: 2.2rem; }
 
 /* 部品:瞬間燃費 */
 .fuel { display: flex; flex-direction: column; gap: 0.6rem; }
@@ -107,8 +109,3 @@ body {
 
 /* 画面の縦横比のお知らせ */
 .aspect-note { position: fixed; top: 0.8rem; left: 50%; transform: translateX(-50%); padding: 0.4rem 1.2rem; border-radius: 99rem; background: #2A2A2A; color: var(--text); font-size: 1.2rem; pointer-events: none; }
-
-/* 車両電圧と充電中のアイコン */
-.volt { display: flex; align-items: center; gap: 0.4rem; }
-.charge-icon { width: 1.1rem; height: 1.5rem; color: var(--mid); opacity: 0; transition: opacity 0.3s; }
-.charge-icon.on { opacity: 1; }

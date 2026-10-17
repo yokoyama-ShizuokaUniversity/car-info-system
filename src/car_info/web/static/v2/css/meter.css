@@ -3,7 +3,7 @@
 /* 左側:メーター(タップで種類を切り替え) */
 .meter-gauge {
   flex-shrink: 0;
-  width: 34.4rem;
+  width: 33.6rem;
   max-height: 100%;
   align-self: center;
   aspect-ratio: 1 / 1;
@@ -28,3 +28,7 @@
 .meter-gps { display: flex; align-items: baseline; gap: 0.4rem; font-size: 1.4rem; color: var(--sub); white-space: nowrap; }
 .meter-gps-value { font-size: 2.2rem; font-weight: 600; color: var(--text); }
 .meter-gps-unit { font-size: 1.3rem; color: var(--sub); }
+
+.meter-volt { display: flex; align-items: baseline; gap: 0.4rem; white-space: nowrap; }
+.meter-volt-value { font-size: 3.6rem; font-weight: 600; }
+.meter-volt-unit { font-size: 1.4rem; color: var(--sub); }
