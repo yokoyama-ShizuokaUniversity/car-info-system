@@ -34,6 +34,11 @@ export const ITEMS = {
   FUEL_STATUS: { label: "燃料制御", unit: "", format: "status" },
   RUN_TIME: { label: "エンジン稼働時間", unit: "", format: "time" },
   obd_cycle_sec: { label: "取得周期", unit: "秒", format: 2 },
+  gps_speed: { label: "GPS速度", unit: "km/h", format: 1 },
+  gps_sats: { label: "衛星数", unit: "個", format: 0 },
+  gps_alt: { label: "高度", unit: "m", format: 0 },
+  gps_course: { label: "進行方向", unit: "°", format: 0 },
+  gps_hdop: { label: "測位精度(HDOP)", unit: "", format: 1 },
 };
 
 // 車両電圧の状態(エンジン回転中のみ表示)

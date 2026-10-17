@@ -49,6 +49,7 @@ export default {
         <span class="label">速度</span>
         <span class="meter-speed-value num">--</span>
         <span class="meter-speed-unit num">km/h</span>
+        <span class="meter-gps">GPS <span class="meter-gps-value num">--</span></span>
       </div>`;
     const idle = createIdleIcon();
     speedRow.appendChild(idle.el);
@@ -57,7 +58,7 @@ export default {
     let chips = createChips(chipSetting.keys.slice(0, chipSetting.count));
     side.append(speedRow, fuel.el, chips.el);
     const speedValue = el.querySelector(".meter-speed-value");
-
+    const gpsValue = el.querySelector(".meter-gps-value");
     function rebuildChips(next) {
       chipSetting = next;
       saveSetting(CHIPS_KEY, next);
@@ -98,6 +99,7 @@ export default {
         last = d;
         gauge.update(d);
         speedValue.textContent = fmt(d.SPEED, 0);
+        gpsValue.textContent = d.gps_fix ? fmt(d.gps_speed, 0) : "--";
         idle.update(d);
         fuel.update(d);
         chips.update(d);
