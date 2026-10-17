@@ -1,0 +1,21 @@
+.gauge-needle { width: 100%; height: 100%; }
+
+/* 円周 */
+.needle-track { fill: none; stroke: var(--line); stroke-width: 8; stroke-linecap: round; }
+.needle-redzone { fill: none; stroke: #5C2E12; stroke-width: 8; }
+.needle-arc { fill: none; stroke: var(--good); stroke-width: 8; stroke-linecap: round; transition: stroke 0.3s; }
+.gauge-needle.is-hot .needle-arc { stroke: var(--bad); }
+
+/* 目盛りと数字 */
+.needle-minor { stroke: var(--dot-off); stroke-width: 2; stroke-linecap: round; }
+.needle-major { stroke: var(--sub); stroke-width: 3; stroke-linecap: round; }
+.needle-labels text { fill: var(--sub); font-family: "Barlow Condensed", sans-serif; font-size: 24px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+.needle-labels .needle-red { fill: var(--bad); }
+
+/* 回転数の数字 */
+.needle-rpm { fill: var(--text); font-size: 46px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+.needle-unit { fill: var(--sub); font-family: "Barlow Condensed", sans-serif; font-size: 16px; text-anchor: middle; dominant-baseline: central; }
+
+/* 針 */
+.needle-pointer { stroke: var(--bad); stroke-width: 4; stroke-linecap: round; transform-origin: 180px 180px; transition: transform 0.25s ease-out; }
+.needle-hub { fill: var(--text); }

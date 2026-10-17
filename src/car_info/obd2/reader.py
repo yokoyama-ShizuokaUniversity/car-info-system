@@ -29,6 +29,14 @@ SLOW_COMMANDS = [
     obd.commands.TIMING_ADVANCE,
     obd.commands.CONTROL_MODULE_VOLTAGE,
     obd.commands.BAROMETRIC_PRESSURE,
+    obd.commands.RUN_TIME,
+    obd.commands.ACCELERATOR_POS_E,
+    obd.commands.THROTTLE_POS_B,
+    obd.commands.RELATIVE_THROTTLE_POS,
+    obd.commands.THROTTLE_ACTUATOR,
+    obd.commands.COMMANDED_EGR,
+    obd.commands.EGR_ERROR,
+    obd.commands.EVAPORATIVE_PURGE,
 ]
 
 
@@ -42,9 +50,10 @@ def to_plain(value):
 class ObdReader(threading.Thread):
     """OBDから値を取得し続け、stateに書き込むスレッド"""
 
-    def __init__(self, state: State):
+    def __init__(self, state: State, on_cycle=None):
         super().__init__(daemon=True)
         self.state = state
+        self.on_cycle = on_cycle  # 1周ごとに呼ぶ処理(燃費計算など)
 
     def connect(self):
         conn = obd.OBD(config.OBD_PORT, protocol=config.OBD_PROTOCOL,
@@ -79,6 +88,10 @@ class ObdReader(threading.Thread):
                 values["obd_time"] = time.time()
                 values["obd_cycle_sec"] = round(time.time() - start, 3)
                 self.state.update(values)
+
+                # 取得した直後の値で計算する(燃費など)
+                if self.on_cycle:
+                    self.state.update(self.on_cycle(self.state.snapshot()))
 
             conn.close()
 

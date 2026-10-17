@@ -1,0 +1,45 @@
+.gauge-runtako { width: 100%; height: 100%; }
+
+/* 回転数の数字 */
+.run-rpm { fill: var(--text); font-size: 44px; font-weight: 600; dominant-baseline: central; }
+.run-unit { fill: var(--sub); font-family: "Barlow Condensed", sans-serif; font-size: 15px; dominant-baseline: central; }
+
+/* 地面(破線が後ろへ流れる) */
+.run-ground { stroke: var(--dot-off); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 14 18; }
+
+/* タコ本体 */
+.run-mantle, .run-skirt { transition: fill 0.3s; }
+.run-leg { fill: none; stroke-width: 12; stroke-linecap: round; transition: stroke 0.3s; }
+.run-cheek { fill: #FF6F86; opacity: 0.5; }
+.run-funnel { fill: #000000; opacity: 0.25; }
+.run-eye-white { fill: #FFFFFF; }
+.run-pupil { fill: #141414; }
+.run-eye { transition: opacity 0.3s; }
+
+/* 状態で出し入れする部分 */
+.run-speedlines { stroke: var(--sub); stroke-width: 3; stroke-linecap: round; }
+.run-sweat { fill: #8FD3FF; }
+.run-hot-eye, .run-sleep-eye { fill: none; stroke: #3A1010; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.run-steam { fill: none; stroke: var(--text); stroke-width: 2.5; stroke-linecap: round; }
+.run-zzz text { fill: var(--text); font-family: "Barlow Condensed", sans-serif; font-weight: 600; }
+.run-speedlines, .run-sweat, .run-hot-eye, .run-sleep-eye, .run-steam, .run-zzz { opacity: 0; transition: opacity 0.3s; }
+
+.gauge-runtako.is-fast .run-speedlines { opacity: 1; }                 /* 4000rpm〜:スピード線 */
+.gauge-runtako.is-sweat .run-sweat { opacity: 1; }                     /* 5500rpm〜:汗 */
+.gauge-runtako.is-hot .run-hot-eye, .gauge-runtako.is-hot .run-steam { opacity: 1; }  /* レッドゾーン */
+.gauge-runtako.is-hot .run-eye { opacity: 0; }
+.gauge-runtako.is-sleep .run-sleep-eye, .gauge-runtako.is-sleep .run-zzz { opacity: 1; } /* エンジン停止 */
+.gauge-runtako.is-sleep .run-eye { opacity: 0; }
+.gauge-runtako.is-sleep .run-zzz text { animation: run-zzz 2.4s ease-in-out infinite; }
+.gauge-runtako.is-sleep .run-zzz text:nth-child(2) { animation-delay: 0.4s; }
+.gauge-runtako.is-sleep .run-zzz text:nth-child(3) { animation-delay: 0.8s; }
+@keyframes run-zzz {
+  0%, 100% { opacity: 0.2; transform: translateY(2px); }
+  50% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* 下のバー */
+.run-seg { fill: var(--line); transition: fill 0.12s; }
+.run-redline { stroke: var(--bad); stroke-width: 2; }
+.run-scale text { fill: var(--sub); font-family: "Barlow Condensed", sans-serif; font-size: 16px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+.run-scale .run-red { fill: var(--bad); }

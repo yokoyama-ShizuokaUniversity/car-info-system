@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>car-info</title>
+<link rel="stylesheet" href="/static/v2/css/base.css">
+</head>
+<body>
+<main class="pager" id="pager"></main>
+<footer class="footer">
+  <div class="status">
+    <span class="conn"><span class="status-dot" id="status-dot"></span><span id="status-text">接続待ち</span></span>
+    <span>区間 <span class="num" id="trip">--</span> km</span>
+  </div>
+  <div class="dots" id="dots" aria-hidden="true"></div>
+  <span class="clock num" id="clock">--:--</span>
+</footer>
+<script type="module" src="/static/v2/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>car-info</title>
+<style>
+@font-face { font-family: "Barlow Condensed"; src: url("/static/fonts/BarlowCondensed-Medium.ttf"); font-weight: 500; }
+@font-face { font-family: "Barlow Condensed"; src: url("/static/fonts/BarlowCondensed-SemiBold.ttf"); font-weight: 600; }
+
+:root {
+  --bg: #000000;
+  --line: #1E1E1E;
+  --text: #F2F2F2;
+  --sub: #858585;
+  --dot-off: #3A3A3A;
+  --good: #3DB8FF;
+  --mid: #F2C94C;
+  --bad: #FF8A3D;
+}
+
+/* 915×412 のとき 1rem = 10px。画面の大きさに合わせて全体が拡大・縮小する */
+html {
+  font-size: min(calc(100vw / 91.5), calc(100vh / 41.2));
+  font-size: min(calc(100vw / 91.5), calc(100dvh / 41.2));
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 2rem max(2.8rem, env(safe-area-inset-right)) 1rem max(2.8rem, env(safe-area-inset-left));
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans JP", "Noto Sans CJK JP", "Hiragino Sans", sans-serif;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.num { font-family: "Barlow Condensed", "Noto Sans CJK JP", sans-serif; font-variant-numeric: tabular-nums; }
+.label { margin: 0; font-size: 1.5rem; font-weight: 500; color: var(--sub); letter-spacing: 0.08em; }
+
+/* ページ切り替え(横スワイプ) */
+.pager { flex: 1; min-height: 0; display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.pager::-webkit-scrollbar { display: none; }
+.page { flex: 0 0 100%; min-width: 0; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+
+/* メイン */
+.main { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.8rem; }
+.hero { display: flex; flex-direction: column; justify-content: center; gap: 1.2rem; min-width: 0; }
+.hero-line { display: flex; align-items: baseline; gap: 1rem; }
+.hero-value { font-size: 16.4rem; font-weight: 600; line-height: 0.85; }
+.hero-unit { font-size: 3rem; font-weight: 500; color: var(--sub); }
+.hero-cut { font-size: 6.2rem; font-weight: 500; line-height: 1.15; color: var(--good); }
+.hero-sub { min-height: 2.4rem; font-size: 1.6rem; color: var(--sub); }
+.bar { height: 1.4rem; border-radius: 0.7rem; background: var(--line); overflow: hidden; }
+.bar-fill { width: 0; height: 100%; border-radius: 0.7rem; background-color: var(--good); transition: width 0.3s ease-out, background-color 0.3s; }
+.scale { display: flex; justify-content: space-between; margin-top: -0.6rem; font-size: 1.5rem; color: var(--sub); }
+
+/* 数値のマス */
+.cells { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 1.2rem; overflow: hidden; }
+.cells.six { grid-template-rows: repeat(3, minmax(0, 1fr)); }
+.cell { display: flex; flex-direction: column; justify-content: center; gap: 0.2rem; min-width: 0; padding: 1.4rem 1.8rem; background: var(--bg); }
+.cell-label { font-size: 1.3rem; color: var(--sub); }
+.cell-line { display: flex; align-items: baseline; gap: 0.6rem; }
+.cell-value { font-size: 5.8rem; font-weight: 600; line-height: 1; }
+.cell-unit { font-size: 1.8rem; color: var(--sub); }
+.cell-text { font-size: 1.8rem; font-weight: 500; line-height: 1.3; }
+.cells.six .cell { padding: 0.8rem 1.6rem; }
+.cells.six .cell-value { font-size: 4.2rem; }
+.cells.six .cell-unit { font-size: 1.5rem; }
+.accent { color: var(--good); }
+
+/* 詳細データ */
+.detail { display: flex; flex-direction: column; gap: 1rem; }
+.detail .cells { flex: 1; min-height: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); }
+.detail .cell { gap: 0.1rem; padding: 0.8rem 1.4rem; }
+.detail .cell-label { font-size: 1.2rem; }
+.detail .cell-value { font-size: 3.4rem; }
+.detail .cell-unit { font-size: 1.4rem; }
+
+/* 下端の帯 */
+footer { height: 3rem; flex-shrink: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; border-top: 1px solid var(--line); font-size: 1.3rem; color: var(--sub); }
+.status { display: flex; align-items: center; gap: 1.8rem; }
+.conn { display: flex; align-items: center; gap: 0.8rem; }
+.status-dot { width: 0.8rem; height: 0.8rem; border-radius: 50%; background: var(--bad); }
+.dots { display: flex; justify-content: center; gap: 0.8rem; }
+.dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--dot-off); }
+.dot.active { background: var(--text); }
+.clock { justify-self: end; font-size: 1.6rem; }
+
+/* 設定パネル */
+.settings { width: min(80rem, 92vw); max-height: 90dvh; overflow-y: auto; padding: 2rem 2.4rem; border: 1px solid var(--line); border-radius: 1.2rem; background: #111111; color: var(--text); font-size: 1.6rem; }
+.settings::backdrop { background: rgba(0, 0, 0, 0.7); }
+.settings h2 { margin: 0; font-size: 1.8rem; font-weight: 500; }
+.settings form { display: flex; flex-direction: column; gap: 1.6rem; }
+.slots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 2rem; }
+.field { display: flex; flex-direction: column; gap: 0.4rem; font-size: 1.3rem; color: var(--sub); }
+.field select { min-height: 4.4rem; padding: 0 1rem; border: 1px solid #3A3A3A; border-radius: 0.8rem; background: #000000; color: var(--text); font-family: inherit; font-size: 1.6rem; }
+.hint { margin: 0; font-size: 1.3rem; color: var(--sub); }
+.close { align-self: flex-end; min-height: 4.4rem; padding: 0 2.4rem; border: none; border-radius: 0.8rem; background: var(--good); color: #000000; font-family: inherit; font-size: 1.6rem; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<main class="pager" id="pager">
+  <section class="page main" id="page-main" aria-label="メイン">
+    <div class="hero">
+      <p class="label" id="hero-label">瞬間燃費</p>
+      <div class="hero-line" id="hero-normal">
+        <span class="hero-value num" id="hero-value">--.-</span>
+        <span class="hero-unit num" id="hero-unit">km/L</span>
+      </div>
+      <div class="hero-cut" id="hero-cut" hidden>燃料カット中</div>
+      <div class="hero-sub" id="hero-sub"></div>
+      <div class="bar"><div class="bar-fill" id="bar-fill"></div></div>
+      <div class="scale num" aria-hidden="true"><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span></div>
+    </div>
+    <div class="cells" id="main-cells"></div>
+  </section>
+
+  <section class="page detail" aria-label="詳細データ">
+    <h1 class="label">詳細データ</h1>
+    <div class="cells" id="detail-cells"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="status">
+    <span class="conn"><span class="status-dot" id="status-dot"></span><span id="status-text">接続待ち</span></span>
+    <span>区間 <span class="num" id="trip">--</span> km</span>
+  </div>
+  <div class="dots" aria-hidden="true"><span class="dot active"></span><span class="dot"></span></div>
+  <span class="clock num" id="clock">--:--</span>
+</footer>
+
+<dialog class="settings" id="settings">
+  <form method="dialog">
+    <h2>メイン画面の表示項目</h2>
+    <div class="field">
+      <label for="set-count">マスの数</label>
+      <select id="set-count">
+        <option value="4">4マス</option>
+        <option value="6">6マス</option>
+      </select>
+    </div>
+    <div class="slots" id="set-slots"></div>
+    <p class="hint">マスは左上から右へ、上から下の順に並びます。設定はこの端末に保存され、メイン画面を長押しするといつでも開けます。</p>
+    <button class="close" type="submit">閉じる</button>
+  </form>
+</dialog>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const SMOOTH = 0.4;     // 瞬間燃費の表示のなめらかさ(1で平滑化なし、小さいほどなめらか)
+const STALE_MS = 5000;  // OBDの値がこの時間更新されなければ「停止中」とみなす
+const SETTINGS_KEY = "car-info-settings";
+
+// 表示できる項目: キー → 表示名・単位・表示形式(小数桁数 / "int" / "time" / "status")
+const ITEMS = {
+  trip_kmpl: { label: "平均燃費(区間)", unit: "km/L", format: 1 },
+  fuel_kmpl: { label: "瞬間燃費", unit: "km/L", format: 1 },
+  fuel_lph: { label: "燃料消費", unit: "L/h", format: 1 },
+  trip_km: { label: "区間距離", unit: "km", format: 1 },
+  trip_fuel_l: { label: "区間燃料", unit: "L", format: 2 },
+  SPEED: { label: "速度", unit: "km/h", format: 0 },
+  RPM: { label: "回転数", unit: "rpm", format: "int" },
+  ACCELERATOR_POS_D: { label: "アクセル開度", unit: "%", format: 0 },
+  ACCELERATOR_POS_E: { label: "アクセル開度(E)", unit: "%", format: 0 },
+  THROTTLE_POS: { label: "スロットル開度", unit: "%", format: 0 },
+  THROTTLE_POS_B: { label: "スロットル開度(B)", unit: "%", format: 0 },
+  RELATIVE_THROTTLE_POS: { label: "相対スロットル開度", unit: "%", format: 0 },
+  THROTTLE_ACTUATOR: { label: "スロットル指令値", unit: "%", format: 0 },
+  ENGINE_LOAD: { label: "エンジン負荷", unit: "%", format: 0 },
+  CONTROL_MODULE_VOLTAGE: { label: "車両電圧(ECU)", unit: "V", format: 1 },
+  COOLANT_TEMP: { label: "水温", unit: "℃", format: 0 },
+  INTAKE_TEMP: { label: "吸気温", unit: "℃", format: 0 },
+  INTAKE_PRESSURE: { label: "吸気圧", unit: "kPa", format: 0 },
+  BAROMETRIC_PRESSURE: { label: "大気圧", unit: "kPa", format: 0 },
+  MAF: { label: "MAF", unit: "g/s", format: 1 },
+  TIMING_ADVANCE: { label: "点火時期", unit: "°", format: 1 },
+  SHORT_FUEL_TRIM_1: { label: "燃料補正(短期)", unit: "%", format: 1 },
+  LONG_FUEL_TRIM_1: { label: "燃料補正(長期)", unit: "%", format: 1 },
+  O2_B1S1: { label: "O2センサー(前)", unit: "V", format: 2 },
+  O2_B1S2: { label: "O2センサー(後)", unit: "V", format: 2 },
+  COMMANDED_EGR: { label: "EGR指令値", unit: "%", format: 0 },
+  EGR_ERROR: { label: "EGR誤差", unit: "%", format: 0 },
+  EVAPORATIVE_PURGE: { label: "エバポパージ", unit: "%", format: 0 },
+  FUEL_STATUS: { label: "燃料制御", unit: "", format: "status" },
+  RUN_TIME: { label: "エンジン稼働時間", unit: "", format: "time" },
+};
+
+// 詳細データのページに並べる項目
+const DETAIL_KEYS = [
+  "COOLANT_TEMP", "INTAKE_TEMP", "INTAKE_PRESSURE", "BAROMETRIC_PRESSURE",
+  "ENGINE_LOAD", "ACCELERATOR_POS_D", "THROTTLE_POS", "TIMING_ADVANCE",
+  "SHORT_FUEL_TRIM_1", "LONG_FUEL_TRIM_1", "O2_B1S1", "O2_B1S2",
+  "MAF", "CONTROL_MODULE_VOLTAGE", "FUEL_STATUS", "RUN_TIME",
+];
+
+// メイン画面のマスの初期設定
+const DEFAULT_SETTINGS = {
+  count: 6,
+  cells: ["trip_kmpl", "SPEED", "RPM", "fuel_lph", "ACCELERATOR_POS_D", "CONTROL_MODULE_VOLTAGE"],
+};
+
+let shownKmpl = null;
+let lastData = null;
+let lastObdTime = null;
+let lastObdChange = 0;
+let sseDown = true;
+
+// ---- 設定の読み書き(この端末のブラウザに保存) ----
+function loadSettings() {
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch (e) { saved = {}; }
+  const count = saved.count === 4 ? 4 : 6;
+  const cells = DEFAULT_SETTINGS.cells.map((def, i) =>
+    saved.cells && ITEMS[saved.cells[i]] ? saved.cells[i] : def);
+  return { count, cells };
+}
+function saveSettings() {
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) { /* 保存できなくても表示は続ける */ }
+}
+let settings = loadSettings();
+
+// ---- 表示用の整形 ----
+function isEmpty(v) { return v === null || v === undefined || Number.isNaN(Number(v)); }
+function fmt(v, digits) { return isEmpty(v) ? "--" : Number(v).toFixed(digits).replace("-", "−"); }
+function fmtInt(v) { return isEmpty(v) ? "--" : Math.round(v).toLocaleString("en-US"); }
+function fmtTime(sec) {
+  if (isEmpty(sec)) return "--";
+  sec = Math.floor(sec);
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = String(sec % 60).padStart(2, "0");
+  return h ? `${h}:${String(m).padStart(2, "0")}:${s}` : `${m}:${s}`;
+}
+function fuelStatusText(st) {
+  const s = (Array.isArray(st) ? st[0] : st || "").toLowerCase();
+  if (!s) return "--";
+  if (s.includes("closed loop") && s.includes("fault")) return "クローズドループ(異常)";
+  if (s.includes("closed loop")) return "クローズドループ";
+  if (s.includes("fuel cut")) return "減速・高負荷";
+  if (s.includes("temperature")) return "暖機中";
+  if (s.includes("failure")) return "異常";
+  return "--";
+}
+function formatItem(key, v) {
+  const format = ITEMS[key].format;
+  if (format === "status") return fuelStatusText(v);
+  if (format === "time") return fmtTime(v);
+  if (format === "int") return fmtInt(v);
+  return fmt(v, format);
+}
+function colorFor(kmpl) {
+  if (kmpl < 10) return "var(--bad)";
+  if (kmpl < 20) return "var(--mid)";
+  return "var(--good)";
+}
+function setBar(kmpl, color) {
+  const fill = $("bar-fill");
+  fill.style.width = Math.max(0, Math.min(100, (kmpl / 40) * 100)) + "%";
+  fill.style.backgroundColor = color;
+}
+
+// ---- マスの作成 ----
+function makeCell(key, id) {
+  const item = ITEMS[key];
+  const cell = document.createElement("div");
+  cell.className = "cell";
+  const valueClass = item.format === "status" ? "cell-text" : "cell-value num";
+  cell.innerHTML =
+    `<div class="cell-label">${item.label}</div>` +
+    `<div class="cell-line"><span class="${valueClass}" id="${id}">--</span>` +
+    `<span class="cell-unit num">${item.unit}</span></div>`;
+  return cell;
+}
+function renderMainCells() {
+  const box = $("main-cells");
+  box.classList.toggle("six", settings.count === 6);
+  box.replaceChildren(...settings.cells.slice(0, settings.count).map((key, i) => makeCell(key, "m-" + i)));
+  if (lastData) updateMainCells(lastData);
+}
+function renderDetailCells() {
+  $("detail-cells").replaceChildren(...DETAIL_KEYS.map((key) => makeCell(key, "d-" + key)));
+}
+
+// ---- 画面の更新 ----
+function updateHero(d) {
+  const cut = d.fuel_mode === "fuel_cut";
+  $("hero-normal").hidden = cut;
+  $("hero-cut").hidden = !cut;
+  $("hero-label").textContent = "瞬間燃費";
+
+  if (cut) {
+    $("hero-sub").textContent = "アクセルオフ・燃料消費 0.0 L/h";
+    setBar(40, "var(--good)");
+    shownKmpl = null;
+    return;
+  }
+
+  if (isEmpty(d.fuel_kmpl)) {
+    // 停車中は燃費の代わりに燃料消費を表示(データがなければ --)
+    const stopped = !isEmpty(d.fuel_lph);
+    if (stopped) $("hero-label").textContent = "燃料消費(停車中)";
+    $("hero-value").textContent = stopped ? fmt(d.fuel_lph, 2) : "--.-";
+    $("hero-unit").textContent = stopped ? "L/h" : "km/L";
+    $("hero-sub").textContent = "";
+    setBar(0, "var(--good)");
+    shownKmpl = null;
+    return;
+  }
+
+  shownKmpl = shownKmpl === null ? d.fuel_kmpl : shownKmpl + (d.fuel_kmpl - shownKmpl) * SMOOTH;
+  $("hero-value").textContent = shownKmpl.toFixed(1);
+  $("hero-unit").textContent = "km/L";
+  $("hero-sub").textContent = d.fuel_mode === "rich" ? "高負荷・暖機中(推定値)" : "";
+  setBar(shownKmpl, colorFor(shownKmpl));
+}
+
+function updateMainCells(d) {
+  const cut = d.fuel_mode === "fuel_cut";
+  settings.cells.slice(0, settings.count).forEach((key, i) => {
+    const el = $("m-" + i);
+    el.textContent = formatItem(key, d[key]);
+    el.classList.toggle("accent", cut && key === "fuel_lph");
+  });
+  $("trip").textContent = fmt(d.trip_km, 1);
+}
+
+function updateDetails(d) {
+  for (const key of DETAIL_KEYS) {
+    $("d-" + key).textContent = formatItem(key, d[key]);
+  }
+}
+
+function updateStatus(d) {
+  const stale = Date.now() - lastObdChange > STALE_MS;
+  let text;
+  let ok = false;
+  if (sseDown) text = "ラズパイと通信できません";
+  else if (!d || d.obd_status !== "接続中") text = "OBD未接続";
+  else if (stale) text = "データ停止中";
+  else { text = "OBD接続中"; ok = true; }
+  $("status-text").textContent = text;
+  $("status-dot").style.background = ok ? "var(--good)" : "var(--bad)";
+}
+
+// ---- 設定パネル ----
+function buildSettings() {
+  $("set-count").value = String(settings.count);
+  const options = Object.entries(ITEMS)
+    .map(([key, item]) => `<option value="${key}">${item.label}</option>`).join("");
+  const fields = [];
+  for (let i = 0; i < DEFAULT_SETTINGS.cells.length; i++) {
+    const field = document.createElement("div");
+    field.className = "field";
+    field.hidden = i >= settings.count;
+    field.innerHTML = `<label for="set-slot-${i}">マス${i + 1}</label><select id="set-slot-${i}">${options}</select>`;
+    const select = field.querySelector("select");
+    select.value = settings.cells[i];
+    select.addEventListener("change", () => {
+      settings.cells[i] = select.value;
+      saveSettings();
+      renderMainCells();
+    });
+    fields.push(field);
+  }
+  $("set-slots").replaceChildren(...fields);
+}
+function openSettings() {
+  if ($("settings").open) return;
+  buildSettings();
+  $("settings").showModal();
+}
+$("set-count").addEventListener("change", () => {
+  settings.count = Number($("set-count").value);
+  saveSettings();
+  renderMainCells();
+  buildSettings();
+});
+
+// メイン画面の長押しで設定を開く
+const pager = $("pager");
+const mainPage = $("page-main");
+let pressTimer = null;
+mainPage.addEventListener("contextmenu", (e) => { e.preventDefault(); openSettings(); });
+mainPage.addEventListener("pointerdown", () => {
+  clearTimeout(pressTimer);
+  pressTimer = setTimeout(openSettings, 700);
+});
+for (const type of ["pointerup", "pointercancel", "pointerleave"]) {
+  mainPage.addEventListener(type, () => clearTimeout(pressTimer));
+}
+
+// ---- ラズパイからのデータ受信(切れても自動で再接続) ----
+const es = new EventSource("/events");
+es.onopen = () => { sseDown = false; };
+es.onmessage = (e) => {
+  sseDown = false;
+  const d = JSON.parse(e.data);
+  if (d.obd_time !== lastObdTime) {
+    lastObdTime = d.obd_time;
+    lastObdChange = Date.now();
+  }
+  lastData = d;
+  updateHero(d);
+  updateMainCells(d);
+  updateDetails(d);
+  updateStatus(d);
+};
+es.onerror = () => {
+  sseDown = true;
+  updateStatus(lastData);
+};
+
+// ---- 時計と接続状態の定期更新 ----
+function tick() {
+  const now = new Date();
+  $("clock").textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, "0")}`;
+  updateStatus(lastData);
+}
+
+// ---- ページ位置の表示 ----
+const dots = document.querySelectorAll(".dot");
+pager.addEventListener("scroll", () => {
+  clearTimeout(pressTimer);
+  const index = Math.round(pager.scrollLeft / pager.clientWidth);
+  dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+}, { passive: true });
+
+// ---- タップで全画面表示・横向き固定 ----
+document.addEventListener("click", () => {
+  if (document.fullscreenElement || !document.documentElement.requestFullscreen) return;
+  document.documentElement.requestFullscreen()
+    .then(() => screen.orientation?.lock?.("landscape"))
+    .catch(() => {});
+});
+
+// ---- 起動時 ----
+renderDetailCells();
+renderMainCells();
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>

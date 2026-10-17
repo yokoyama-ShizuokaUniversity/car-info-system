@@ -1,0 +1,43 @@
+.gauge-tako { width: 100%; height: 100%; }
+
+/* メーターの円周と目盛り */
+.tako-track { fill: none; stroke: var(--line); stroke-width: 6; stroke-linecap: round; }
+.tako-redzone { fill: none; stroke: #5C2E12; stroke-width: 6; }
+.tako-arc { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke 0.3s; }
+.tako-labels text { fill: var(--sub); font-family: "Barlow Condensed", sans-serif; font-size: 22px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+.tako-labels .tako-red { fill: var(--bad); }
+
+/* タコ本体 */
+.tako-leg { fill: #262626; transition: fill 0.3s; }
+.tako-sucker { fill: #000000; opacity: 0.2; }
+.tako-head { transition: fill 0.3s; }
+.tako-cheek { fill: #FF6F86; opacity: 0.5; }
+.tako-eye-white { fill: #FFFFFF; }
+.tako-pupil { fill: #141414; transition: transform 0.3s ease-out; }
+.tako-mouth { fill: #000000; opacity: 0.25; }
+.tako-eyes { transition: opacity 0.3s; }
+
+/* レッドゾーン(ゆでダコ) */
+.tako-hot { fill: none; stroke: #3A1010; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.tako-steam { fill: none; stroke: var(--text); stroke-width: 2.5; stroke-linecap: round; }
+.tako-hot, .tako-steam { opacity: 0; transition: opacity 0.3s; }
+.gauge-tako.is-hot .tako-hot, .gauge-tako.is-hot .tako-steam { opacity: 1; }
+.gauge-tako.is-hot .tako-eyes { opacity: 0; }
+
+/* エンジン停止中(寝ている) */
+.tako-sleep { fill: none; stroke: #3A1010; stroke-width: 3; stroke-linecap: round; }
+.tako-zzz text { fill: var(--text); font-family: "Barlow Condensed", sans-serif; font-weight: 600; }
+.tako-sleep, .tako-zzz { opacity: 0; transition: opacity 0.3s; }
+.gauge-tako.is-sleep .tako-sleep, .gauge-tako.is-sleep .tako-zzz { opacity: 1; }
+.gauge-tako.is-sleep .tako-eyes { opacity: 0; }
+.gauge-tako.is-sleep .tako-zzz text { animation: tako-zzz 2.4s ease-in-out infinite; }
+.gauge-tako.is-sleep .tako-zzz text:nth-child(2) { animation-delay: 0.4s; }
+.gauge-tako.is-sleep .tako-zzz text:nth-child(3) { animation-delay: 0.8s; }
+@keyframes tako-zzz {
+  0%, 100% { opacity: 0.2; transform: translateY(2px); }
+  50% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* 回転数の数字 */
+.tako-rpm { fill: var(--text); font-size: 44px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+.tako-rpm-unit { fill: var(--sub); font-family: "Barlow Condensed", sans-serif; font-size: 15px; text-anchor: middle; dominant-baseline: central; }
