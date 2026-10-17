@@ -42,6 +42,15 @@ function mountPages() {
   return views;
 }
 
+// GPSの状態(表示する文字と点の色)
+function gpsStatus(d) {
+  if (status.sseDown || !d || !d.gps_status) return { text: "GPS --", level: "bad" };
+  if (d.gps_status === "未接続") return { text: "GPS未接続", level: "bad" };
+  if (d.gps_status === "受信なし") return { text: "GPSデータなし", level: "bad" };
+  if (!d.gps_fix) return { text: "GPS測位待ち", level: "wait" };
+  return { text: `GPS測位中(衛星${d.gps_sats ?? "--"})`, level: "ok" };
+}
+
 // 下端の帯(接続状態・区間距離)
 function updateFooter(d) {
   const stale = Date.now() - status.lastObdChange > STALE_MS;
@@ -54,6 +63,10 @@ function updateFooter(d) {
   $("status-text").textContent = text;
   $("status-dot").classList.toggle("ok", ok);
   if (d) $("trip").textContent = fmt(d.trip_km, 1);
+  const gps = gpsStatus(d);
+  $("gps-text").textContent = gps.text;
+  $("gps-dot").classList.toggle("ok", gps.level === "ok");
+  $("gps-dot").classList.toggle("wait", gps.level === "wait");
 }
 
 function tick() {
@@ -78,3 +91,12 @@ subscribe((d) => {
 connect();
 tick();
 setInterval(tick, 1000);
+
+// 想定(915×412、約2.2:1)と大きく違う縦横比のときにお知らせを出す
+const EXPECTED_RATIO = 915 / 412;
+function checkAspect() {
+  const ratio = window.innerWidth / window.innerHeight;
+  $("aspect-note").hidden = ratio > EXPECTED_RATIO * 0.8 && ratio < EXPECTED_RATIO * 1.25;
+}
+window.addEventListener("resize", checkAspect);
+checkAspect();

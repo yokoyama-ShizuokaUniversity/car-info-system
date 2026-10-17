@@ -54,7 +54,7 @@ body {
 .dots { display: flex; justify-content: center; gap: 0.8rem; }
 .dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--dot-off); }
 .dot.active { background: var(--text); }
-.clock { justify-self: end; font-size: 1.6rem; }
+.clock { font-size: 1.6rem; }
 
 /* 部品:瞬間燃費 */
 .fuel { display: flex; flex-direction: column; gap: 0.6rem; }
@@ -89,3 +89,10 @@ body {
 .field select { min-height: 4.4rem; padding: 0 1rem; border: 1px solid #3A3A3A; border-radius: 0.8rem; background: #000000; color: var(--text); font-family: inherit; font-size: 1.6rem; }
 .hint { margin: 0; font-size: 1.3rem; color: var(--sub); }
 .close { align-self: flex-end; min-height: 4.4rem; padding: 0 2.4rem; border: none; border-radius: 0.8rem; background: var(--good); color: #000000; font-family: inherit; font-size: 1.6rem; font-weight: 500; }
+
+/* 下端の帯の右側(GPSの状態と時計) */
+.footer-right { justify-self: end; display: flex; align-items: center; gap: 1.8rem; }
+.status-dot.wait { background: var(--mid); }
+
+/* 画面の縦横比のお知らせ */
+.aspect-note { position: fixed; top: 0.8rem; left: 50%; transform: translateX(-50%); padding: 0.4rem 1.2rem; border-radius: 99rem; background: #2A2A2A; color: var(--text); font-size: 1.2rem; pointer-events: none; }

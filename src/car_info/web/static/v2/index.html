@@ -15,8 +15,12 @@
     <span>区間 <span class="num" id="trip">--</span> km</span>
   </div>
   <div class="dots" id="dots" aria-hidden="true"></div>
-  <span class="clock num" id="clock">--:--</span>
+  <div class="footer-right">
+    <span class="conn"><span class="status-dot" id="gps-dot"></span><span id="gps-text">GPS --</span></span>
+    <span class="clock num" id="clock">--:--</span>
+  </div>
 </footer>
+<div class="aspect-note" id="aspect-note" hidden>画面の縦横比が想定と違うため、表示が崩れることがあります(推奨:横長・約2.2:1)</div>
 <script type="module" src="/static/v2/js/app.js"></script>
 </body>
 </html>
