@@ -71,7 +71,7 @@ class FuelCalculator:
 
     def update(self, snap: dict) -> dict:
         result = calc_instant(snap)
-        t = snap.get("obd_time")
+        t = snap.get("obd_mono", snap.get("obd_time"))
         if not result or t is None:
             return result
 

@@ -85,7 +85,7 @@ class ObdReader(threading.Thread):
 
                 values = {cmd.name: to_plain(conn.query(cmd).value) for cmd in cmds}
                 values["obd_status"] = "接続中"
-                values["obd_time"] = time.time()
+                values["obd_time"] = time.monotonic()
                 values["obd_cycle_sec"] = round(time.time() - start, 3)
                 self.state.update(values)
 

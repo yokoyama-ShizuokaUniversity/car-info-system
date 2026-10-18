@@ -11,7 +11,7 @@ from car_info.obd2.reader import ObdReader
 from car_info.settings_store import SettingsStore
 from car_info.state import State
 from car_info.web.server import create_app
-
+from car_info.recorder import DataRecorder
 
 def redirect_app() -> FastAPI:
     """HTTPで来たアクセスを、HTTPSの同じページへ転送する"""
@@ -54,6 +54,7 @@ def main():
     fuel = FuelCalculator(price_of=lambda: store.get("fuel_price"))
     ObdReader(state, on_cycle=fuel.update).start()
     GnssReader(state).start()
+    DataRecorder(state).start()
 
     # Webサーバーの起動は最後に(ここでプログラムが動き続け、次の行には進まない)
     serve(create_app(state, store))

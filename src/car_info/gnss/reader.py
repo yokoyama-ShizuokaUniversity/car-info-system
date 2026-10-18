@@ -1,6 +1,6 @@
 import threading
 import time
-from datetime import timezone
+from datetime import datetime, timezone
 
 import pynmea2
 import serial
@@ -18,6 +18,15 @@ def nmea_sentence(body: str) -> str:
         checksum ^= ord(ch)
     return f"${body}*{checksum:02X}"
 
+def set_system_clock(gps_iso: str) -> bool:
+    """システム時刻をGPS時刻に設定する"""
+    try:
+        time.clock_settime(time.CLOCK_REALTIME, datetime.fromisoformat(gps_iso).timestamp())
+    except PermissionError:
+        print("時刻を変更する権限がないため、システム時刻は設定しません", flush=True)
+        return False
+    print(f"システム時刻をGPS時刻に設定しました: {gps_iso}", flush=True)
+    return True
 
 def parse_line(line: str) -> dict:
     """NMEAの1行を読み取り、stateに書き込む値を返す(対象外の行は空の辞書)"""
@@ -58,6 +67,7 @@ class GnssReader(threading.Thread):
     def __init__(self, state: State):
         super().__init__(daemon=True)
         self.state = state
+        self.clock_done = False # 起動後にシステム時刻を設定したか
 
     def setup(self, ser: serial.Serial):
         """受信機の設定:RMCとGGAだけを出力し、更新回数を上げる"""
@@ -84,6 +94,10 @@ class GnssReader(threading.Thread):
                         if values:
                             values["gps_status"] = "受信中"
                             values["gps_rx_time"] = time.time()
+                            values["gps_rx_mono"] = time.monotonic()  # 時計が飛んでも狂わない受信時刻
+                            if config.CLOCK_SYNC_FROM_GPS and not self.clock_done and values.get("gps_time"):
+                                set_system_clock(values["gps_time"])
+                                self.clock_done = True  # 成功・失敗にかかわらず、試すのは1回だけ
                             self.state.update(values)
             except serial.SerialException:
                 self.state.update({"gps_status": "未接続", "gps_fix": False})

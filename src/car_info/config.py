@@ -21,3 +21,16 @@ HTTPS_PORT = int(os.environ.get("CAR_HTTPS_PORT", "443"))
 # HTTPSの証明書(なければHTTPだけで起動する)
 TLS_CERT = DATA_DIR / "tls" / "cert.pem"
 TLS_KEY = DATA_DIR / "tls" / "key.pem"
+
+# GPSの時刻でシステム時刻を合わせる
+CLOCK_SYNC_FROM_GPS = True
+
+# 走行データの記録
+LOG_DIR = Path(os.environ.get("CAR_LOG_DIR", str(DATA_DIR / "logs"))).expanduser()
+LOG_DRIVING_HZ = 10     # 走行中の記録回数 [回/秒]
+LOG_STOPPED_HZ = 1      # 停車中の記録回数 [回/秒]
+LOG_STOP_HOLD_SEC = 3   # 車速0がこの秒数続いたら停車中とみなす
+LOG_FLUSH_SEC = 5       # SDカードに書き込む間隔 [秒]
+LOG_ROTATE_SEC = 3600   # ファイルを分ける間隔 [秒]
+LOG_STALE_SEC = 10      # OBDの値がこの秒数更新されなければ記録を終える
+LOG_MIN_FREE_MB = 500   # 空き容量がこれを下回ったら古いファイルから削除 [MB]
