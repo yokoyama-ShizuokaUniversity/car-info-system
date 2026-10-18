@@ -1,3 +1,5 @@
+import { openPriceInput } from "./price.js";
+
 // 表示できる項目の一覧と、表示用の整形
 // 項目を増やすときは ITEMS に1行追加する(format: 小数桁数 / "int" / "time" / "status")
 
@@ -39,6 +41,9 @@ export const ITEMS = {
   gps_alt: { label: "高度", unit: "m", format: 0 },
   gps_course: { label: "進行方向", unit: "°", format: 0 },
   gps_hdop: { label: "測位精度(HDOP)", unit: "", format: 1 },
+  trip_cost_yen: { label: "燃料費", unit: "円", format: 0, onTap: openPriceInput },
+  cost_per_km: { label: "1kmあたり", unit: "円/km", format: 1, onTap: openPriceInput },
+  fuel_price: { label: "ガソリン単価", unit: "円/L", format: 1, onTap: openPriceInput },
 };
 
 // 水温の色(しきい値は目安。実車の値を見て調整する)

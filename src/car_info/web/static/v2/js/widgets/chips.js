@@ -9,6 +9,12 @@ export function createChips(keys) {
     const item = ITEMS[key];
     const chip = document.createElement("div");
     chip.className = "chip";
+    if (item.onTap) {
+      chip.classList.add("is-tappable");
+      chip.setAttribute("role", "button");
+      chip.tabIndex = 0;
+      chip.addEventListener("click", item.onTap);
+    }
     chip.innerHTML = `
       <span class="chip-label">${item.label}</span>
       <span class="chip-line"><span class="chip-value num">--</span><span class="chip-unit"></span></span>`;
