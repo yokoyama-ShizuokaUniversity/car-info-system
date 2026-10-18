@@ -21,3 +21,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 Car Connected
 >>> c.protocol_name()
 'ISO 15765-4 (CAN 11/500)'
+
+
+## TLS認証あり
+注意
