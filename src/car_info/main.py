@@ -12,6 +12,7 @@ from car_info.settings_store import SettingsStore
 from car_info.state import State
 from car_info.web.server import create_app
 from car_info.recorder import DataRecorder
+from car_info.obd2.pedal import calc_pedal
 
 def redirect_app() -> FastAPI:
     """HTTPで来たアクセスを、HTTPSの同じページへ転送する"""
@@ -52,7 +53,12 @@ def main():
 
     # OBDの値を取得した直後に、その値で燃費・燃料費を計算する
     fuel = FuelCalculator(price_of=lambda: store.get("fuel_price"))
-    ObdReader(state, on_cycle=fuel.update).start()
+    def on_cycle(snap: dict) -> dict:
+        """OBDの値を取得した直後に行う計算(燃費・燃料費・アクセル開度の換算)"""
+        result = fuel.update(snap)
+        result.update(calc_pedal(snap))
+        return result
+    ObdReader(state, on_cycle=on_cycle).start()
     GnssReader(state).start()
     DataRecorder(state).start()
 

@@ -34,3 +34,7 @@ LOG_FLUSH_SEC = 5       # SDカードに書き込む間隔 [秒]
 LOG_ROTATE_SEC = 3600   # ファイルを分ける間隔 [秒]
 LOG_STALE_SEC = 10      # OBDの値がこの秒数更新されなければ記録を終える
 LOG_MIN_FREE_MB = 500   # 空き容量がこれを下回ったら古いファイルから削除 [MB]
+
+# アクセル開度の生の値の範囲(実車で計測:離したとき・踏み切ったとき)
+ACCEL_RAW_MIN = 16.0
+ACCEL_RAW_MAX = 66.0
