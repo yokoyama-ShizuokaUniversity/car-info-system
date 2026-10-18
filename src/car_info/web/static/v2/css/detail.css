@@ -1,0 +1,2 @@
+.detail { display: flex; flex-direction: column; gap: 1rem; }
+.detail-cells { flex: 1; min-height: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); }

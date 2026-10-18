@@ -1,0 +1,10 @@
+.gps { display: flex; flex-direction: column; gap: 1rem; }
+.gps-cells { flex: 1; min-height: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+.gps .cell { gap: 0.4rem; padding: 1.2rem 1.8rem; }
+.gps .cell-value { font-size: 4.4rem; }
+
+/* 進行方向のコンパス */
+.gps-heading { align-items: center; gap: 1.2rem; }
+.gps-compass { flex-shrink: 0; width: 4.4rem; height: 4.4rem; }
+.gps-compass circle { fill: none; stroke: var(--dot-off); stroke-width: 2; }
+.gps-needle { fill: var(--bad); transform-origin: 20px 20px; transition: transform 0.3s ease-out; }

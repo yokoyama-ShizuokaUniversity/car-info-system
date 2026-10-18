@@ -1,6 +1,8 @@
 import { connect, subscribe, status } from "./data.js";
 import { fmt } from "./items.js";
 import meter from "./pages/meter.js";
+import gps from "./pages/gps.js";
+import detail from "./pages/detail.js";
 
 // 表示するページ(左から順)。ページを増やすときは pages/ に作ってここに追加する
 const PAGES = [meter];
