@@ -59,7 +59,7 @@ export const detailEngine = createDetailPage({
 // 2枚目:区間・燃料費・その他
 export const detailTrip = createDetailPage({
   id: "detail-trip",
-  title: "詳細データ(区間・その他)",
+  title: "詳細データ(トリップ・その他)",
   keys: [
     "trip_km", "trip_fuel_l", "trip_kmpl", "trip_cost_yen",
     "cost_per_km", "fuel_price", "fuel_lph", "SPEED",
