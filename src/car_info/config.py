@@ -13,3 +13,11 @@ GPS_RATE_HZ = 5     # 1秒あたりの更新回数(9600bpsなら5回まで)
 
 # 設定や走行データを保存する場所(環境変数で変更可)
 DATA_DIR = Path(os.environ.get("CAR_DATA_DIR", "~/car-data")).expanduser()
+
+# Webサーバーのポート(手動で起動するときは環境変数で 8000・8443 などに変更)
+HTTP_PORT = int(os.environ.get("CAR_HTTP_PORT", "80"))
+HTTPS_PORT = int(os.environ.get("CAR_HTTPS_PORT", "443"))
+
+# HTTPSの証明書(なければHTTPだけで起動する)
+TLS_CERT = DATA_DIR / "tls" / "cert.pem"
+TLS_KEY = DATA_DIR / "tls" / "key.pem"

@@ -18,14 +18,14 @@ class FuelPrice(BaseModel):
 
 def create_app(state: State, store: SettingsStore | None = None) -> FastAPI:
     app = FastAPI()
-
+    
     @app.get("/")
     def index():
-        return FileResponse(STATIC_DIR / "index.html")
-    
-    @app.get("/v2")
-    def index_v2():
         return FileResponse(STATIC_DIR / "v2" / "index.html")
+
+    @app.get("/v1")
+    def index_v1():
+        return FileResponse(STATIC_DIR / "index.html")
 
     @app.get("/events")
     async def events():

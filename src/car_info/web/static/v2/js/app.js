@@ -126,3 +126,17 @@ function checkAspect() {
 }
 window.addEventListener("resize", checkAspect);
 checkAspect();
+
+// 画面を消さない(HTTPSで開いているときだけ使える)
+async function keepScreenOn() {
+  if (!("wakeLock" in navigator) || document.visibilityState !== "visible") return;
+  try {
+    await navigator.wakeLock.request("screen");
+  } catch (e) {
+    console.warn("画面を消さない設定ができませんでした", e);
+  }
+}
+// 別のアプリから戻ってきたときにも、かけ直す
+document.addEventListener("visibilitychange", keepScreenOn);
+document.addEventListener("click", keepScreenOn);
+keepScreenOn();
