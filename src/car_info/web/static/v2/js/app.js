@@ -5,7 +5,7 @@ import gps from "./pages/gps.js";
 import detail from "./pages/detail.js";
 
 // 表示するページ(左から順)。ページを増やすときは pages/ に作ってここに追加する
-const PAGES = [meter];
+const PAGES = [meter, gps, detail];
 
 const STALE_MS = 5000; // OBDの値がこの時間更新されなければ「停止中」とみなす
 const $ = (id) => document.getElementById(id);
