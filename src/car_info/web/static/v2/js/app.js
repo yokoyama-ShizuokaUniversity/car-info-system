@@ -10,11 +10,24 @@ const PAGES = [meter, gps, detailEngine, detailTrip];
 const STALE_MS = 5000; // OBDの値がこの時間更新されなければ「停止中」とみなす
 const $ = (id) => document.getElementById(id);
 
-// ページを並べ、ページ位置の点を作る
+// ホームのアイコン(下端の1つ目の印)
+const HOME_ICON = `
+  <svg class="dot-home" viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M8 1.5 L15 8 H12.8 V14.5 H9.6 V10.2 H6.4 V14.5 H3.2 V8 H1 Z" fill="currentColor"></path>
+  </svg>`;
+
+// 指定したページへ移動する(0がホーム)
+function goToPage(index) {
+  const pager = $("pager");
+  pager.scrollTo({ left: index * pager.clientWidth, behavior: "smooth" });
+}
+
+// ページを並べ、下端にページ位置の印を作る(印を押すとそのページへ移動)
 function mountPages() {
   const pager = $("pager");
   const dots = $("dots");
-  const views = PAGES.map((page) => {
+
+  const views = PAGES.map((page, i) => {
     // ページ専用のCSSを読み込む(1つでも複数でも可)
     for (const href of [].concat(page.css || [])) {
       const link = document.createElement("link");
@@ -28,11 +41,22 @@ function mountPages() {
     section.setAttribute("aria-label", page.title);
     pager.appendChild(section);
 
-    const dot = document.createElement("span");
+    const dot = document.createElement("button");
+    dot.type = "button";
     dot.className = "dot";
+    dot.setAttribute("aria-label", i === 0 ? "ホームに戻る" : `${page.title}へ移動`);
+    dot.innerHTML = i === 0 ? HOME_ICON : '<span class="dot-mark"></span>';
+    dot.addEventListener("click", () => goToPage(i));
     dots.appendChild(dot);
 
-    return page.mount(section);
+    try {
+      return page.mount(section);
+    } catch (e) {
+      // 1つのページでエラーが起きても、ほかのページは動かし続ける
+      console.error(`ページ「${page.title}」の表示でエラー`, e);
+      section.textContent = `「${page.title}」の表示でエラーが発生しました`;
+      return { update() {} };
+    }
   });
 
   dots.firstChild?.classList.add("active");
