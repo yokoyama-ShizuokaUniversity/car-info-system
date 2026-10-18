@@ -22,8 +22,10 @@ function pct(kmpl) {
 export function createFuelGauge() {
   const ticks = TICKS.map((v) =>
     `<span class="fuel-tick${LABELS.includes(v) ? " is-major" : ""}" style="left: ${pct(v)}%"></span>`).join("");
-  const labels = LABELS.map((v) =>
-    `<span class="fuel-scale-label" style="left: ${pct(v)}%">${v}</span>`).join("");
+  const labels = LABELS.map((v) => {
+    const edge = v === 0 ? " is-start" : v === MAX_KMPL ? " is-end" : "";
+    return `<span class="fuel-scale-label${edge}" style="left: ${pct(v)}%">${v}</span>`;
+  }).join("");
 
   const el = document.createElement("div");
   el.className = "fuel";

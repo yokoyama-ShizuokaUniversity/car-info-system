@@ -44,7 +44,7 @@ body {
 /* ページ切り替え(横スワイプ) */
 .pager { flex: 1; min-height: 0; display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .pager::-webkit-scrollbar { display: none; }
-.page { flex: 0 0 100%; min-width: 0; height: 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+.page { flex: 0 0 100%; min-width: 0; height: 100%; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; }
 
 /* 下端の帯 */
 .footer { height: 4.2rem; flex-shrink: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; border-top: 1px solid var(--line); font-size: 1.7rem; color: var(--sub); }
@@ -79,6 +79,8 @@ body {
 .fuel-tick { position: absolute; top: 0; width: 0.2rem; height: 0.6rem; margin-left: -0.1rem; background: var(--dot-off); }
 .fuel-tick.is-major { height: 1rem; background: var(--sub); }
 .fuel-scale-label { position: absolute; top: 1.2rem; transform: translateX(-50%); font-size: 1.8rem; line-height: 1; }
+.fuel-scale-label.is-start { transform: none; }
+.fuel-scale-label.is-end { transform: translateX(-100%); }
 
 /* 部品:小さな数値表示 */
 .chips { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 0.8rem; }
