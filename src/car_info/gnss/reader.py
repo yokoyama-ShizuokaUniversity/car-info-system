@@ -26,7 +26,9 @@ def parse_line(line: str) -> dict:
     except (pynmea2.ParseError, ValueError):
         return {}
 
-    if msg.sentence_type == "RMC":
+    kind = getattr(msg, "sentence_type", None)  # 受信機独自の文($PMTK...)には種類がない
+
+    if kind == "RMC":
         if msg.status != "A":  # A:測位中 / V:測位できていない
             return {"gps_fix": False}
         values = {
@@ -40,7 +42,7 @@ def parse_line(line: str) -> dict:
             values["gps_time"] = msg.datetime.replace(tzinfo=timezone.utc).isoformat()
         return values
 
-    if msg.sentence_type == "GGA":
+    if kind == "GGA":
         return {
             "gps_sats": int(msg.num_sats or 0),
             "gps_hdop": float(msg.horizontal_dil) if msg.horizontal_dil else None,
@@ -85,4 +87,10 @@ class GnssReader(threading.Thread):
                             self.state.update(values)
             except serial.SerialException:
                 self.state.update({"gps_status": "未接続", "gps_fix": False})
+                time.sleep(5)
+                
+            except Exception as e:
+                # 想定外のエラーでもスレッドを止めず、内容を表示して再試行する
+                print(f"GPS読み取りエラー: {e!r}", flush=True)
+                self.state.update({"gps_status": "エラー", "gps_fix": False})
                 time.sleep(5)
