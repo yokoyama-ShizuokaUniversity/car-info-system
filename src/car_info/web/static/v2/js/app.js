@@ -3,6 +3,7 @@ import { fmt } from "./items.js";
 import meter from "./pages/meter.js";
 import gps from "./pages/gps.js";
 import { detailEngine, detailTrip } from "./pages/detail.js";
+import { openShutdownDialog } from "./power.js";
 
 // 表示するページ(左から順)。ページを増やすときは pages/ に作ってここに追加する
 const PAGES = [meter, gps, detailEngine, detailTrip];
@@ -55,7 +56,7 @@ function mountPages() {
       // 1つのページでエラーが起きても、ほかのページは動かし続ける
       console.error(`ページ「${page.title}」の表示でエラー`, e);
       section.textContent = `「${page.title}」の表示でエラーが発生しました`;
-      return { update() {} };
+      return { update() { } };
     }
   });
 
@@ -106,7 +107,7 @@ document.addEventListener("click", () => {
   if (document.fullscreenElement || !document.documentElement.requestFullscreen) return;
   document.documentElement.requestFullscreen()
     .then(() => screen.orientation?.lock?.("landscape"))
-    .catch(() => {});
+    .catch(() => { });
 });
 
 const views = mountPages();
@@ -140,3 +141,5 @@ async function keepScreenOn() {
 document.addEventListener("visibilitychange", keepScreenOn);
 document.addEventListener("click", keepScreenOn);
 keepScreenOn();
+
+$("power-btn").addEventListener("click", openShutdownDialog);

@@ -47,7 +47,7 @@ body {
 .page { flex: 0 0 100%; min-width: 0; height: 100%; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; }
 
 /* 下端の帯 */
-.footer { height: 4.2rem; flex-shrink: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: center; border-top: 1px solid var(--line); font-size: 1.7rem; color: var(--sub); }
+.footer { height: 4.2rem; flex-shrink: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; border-top: 1px solid var(--line); font-size: 1.7rem; color: var(--sub); }
 .status { display: flex; align-items: center; gap: 2.4rem; }
 .conn { display: flex; align-items: center; gap: 1rem; }
 .status-dot { width: 1.1rem; height: 1.1rem; border-radius: 50%; background: var(--bad); }
@@ -132,3 +132,9 @@ body {
 /* タップできる表示 */
 .is-tappable { cursor: pointer; }
 .is-tappable .chip-label, .is-tappable .cell-label { text-decoration: underline dotted; text-underline-offset: 0.3rem; }
+
+/* 電源ボタン */
+.power-btn { display: flex; align-items: center; justify-content: center; width: 3.2rem; height: 3.2rem; padding: 0; border: 1px solid var(--dot-off); border-radius: 50%; background: none; color: var(--sub); cursor: pointer; }
+.power-btn svg { width: 1.6rem; height: 1.6rem; }
+.power-message { margin: 0; font-size: 1.6rem; line-height: 1.6; }
+.close.danger { background: var(--hot); color: #000000; }
