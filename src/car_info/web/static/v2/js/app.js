@@ -2,11 +2,12 @@ import { connect, subscribe, status } from "./data.js";
 import { fmt } from "./items.js";
 import meter from "./pages/meter.js";
 import gps from "./pages/gps.js";
+import accel from "./pages/accel.js";
 import { detailEngine, detailTrip } from "./pages/detail.js";
 import { openShutdownDialog } from "./power.js";
 
 // 表示するページ(左から順)。ページを増やすときは pages/ に作ってここに追加する
-const PAGES = [meter, gps, detailEngine, detailTrip];
+const PAGES = [meter, gps, accel, detailEngine, detailTrip];
 
 const STALE_MS = 5000; // OBDの値がこの時間更新されなければ「停止中」とみなす
 const $ = (id) => document.getElementById(id);

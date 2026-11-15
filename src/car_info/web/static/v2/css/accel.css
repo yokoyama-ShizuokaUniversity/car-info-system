@@ -1,0 +1,23 @@
+.accel { display: flex; flex-direction: column; gap: 1rem; }
+.accel-body { flex: 1; min-height: 0; display: flex; gap: 2.4rem; }
+
+/* 左:円形のG計 */
+.accel-meter { flex-shrink: 0; height: 100%; aspect-ratio: 1; overflow: visible; }
+.accel-ring { fill: none; stroke: var(--line); stroke-width: 1; }
+.accel-ring.is-outer { stroke: var(--dot-off); }
+.accel-ring-label { fill: var(--sub); font-size: 7px; }
+.accel-axis { stroke: var(--dot-off); stroke-width: 0.6; }
+.accel-dir { fill: var(--sub); font-size: 8px; text-anchor: middle; }
+.accel-trail { fill: none; stroke: var(--good); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0.35; }
+.accel-dot { fill: var(--good); transition: cx 0.2s linear, cy 0.2s linear; }
+
+/* 右:数値 */
+.accel-side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1rem; }
+.accel-cells { flex: 1; min-height: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+.accel .cell { gap: 0.4rem; padding: 1.2rem 1.8rem; }
+.accel .cell-value { font-size: 4.4rem; }
+
+/* 右下:状態とリセット */
+.accel-foot { display: flex; align-items: center; justify-content: space-between; gap: 1.2rem; }
+.accel-state { font-size: 1.4rem; color: var(--sub); }
+.accel-reset { min-height: 4.4rem; padding: 0 2.4rem; border: 1px solid #3A3A3A; border-radius: 0.8rem; background: none; color: var(--text); font-family: inherit; font-size: 1.6rem; cursor: pointer; }
