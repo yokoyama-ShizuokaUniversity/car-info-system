@@ -1,0 +1,20 @@
+.drive { display: flex; flex-direction: column; gap: 1rem; }
+.drive-body { flex: 1; min-height: 0; display: flex; align-items: center; gap: 2.4rem; }
+
+/* 左:コンパス(進行方向が上) */
+.drive-compass, .drive-gmeter { flex-shrink: 0; height: 100%; aspect-ratio: 1; overflow: visible; }
+.drive-dial { transform-origin: 0 0; transition: transform 0.4s ease-out; }
+.drive-dial-ring { fill: none; stroke: var(--dot-off); stroke-width: 1; }
+.drive-tick { stroke: var(--dot-off); stroke-width: 1; }
+.drive-tick.is-major { stroke: var(--sub); stroke-width: 1.6; }
+.drive-cardinal { fill: var(--sub); font-size: 15px; text-anchor: middle; dominant-baseline: middle; }
+.drive-cardinal.is-north { fill: var(--bad); font-weight: 600; }
+.drive-pointer { fill: var(--good); }
+.drive-dir { fill: var(--text); font-size: 30px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; }
+.drive-deg { fill: var(--sub); font-size: 18px; text-anchor: middle; dominant-baseline: middle; }
+.drive.is-stale .drive-dial, .drive.is-stale .drive-dir, .drive.is-stale .drive-pointer { opacity: 0.4; }
+
+/* 右:数値 */
+.drive-cells { flex: 1; min-width: 0; align-self: stretch; grid-template-columns: minmax(0, 1fr); grid-template-rows: repeat(3, minmax(0, 1fr)); }
+.drive .cell { padding: 0.6rem 1.6rem; }
+.drive .cell-value { font-size: 3.8rem; }

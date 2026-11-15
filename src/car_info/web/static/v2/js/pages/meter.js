@@ -47,12 +47,12 @@ export default {
     speedRow.innerHTML = `
       <div class="meter-speed-left">
         <div class="meter-speed-line">
-          <span class="label">速度</span>
+          <span class="label">GPS</span>
           <span class="meter-speed-value num">${fixedWidth("--", 3)}</span>
           <span class="meter-speed-unit num">km/h</span>
         </div>
         <span class="meter-gps">
-          <span class="meter-gps-label">GPS</span>
+          <span class="meter-gps-label">車速</span>
           <span class="meter-gps-value num">${fixedWidth("--", 3)}</span>
           <span class="meter-gps-unit num">km/h</span>
         </span>
@@ -112,8 +112,8 @@ export default {
         if (!d) return;
         last = d;
         gauge.update(d);
-        speedValue.textContent = fixedWidth(fmt(d.SPEED, 0), 3);
-        gpsValue.textContent = fixedWidth(d.gps_fix ? fmt(d.gps_speed, 0) : "--", 3);
+        speedValue.textContent = fixedWidth(d.gps_fix ? fmt(d.gps_speed, 0) : "--", 3);
+        gpsValue.textContent = fixedWidth(fmt(d.SPEED, 0), 3);
         voltValue.textContent = fixedWidth(fmt(d.CONTROL_MODULE_VOLTAGE, 1), 4);
         idle.update(d);
         fuel.update(d);

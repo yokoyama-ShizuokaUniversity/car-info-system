@@ -21,7 +21,7 @@
 .meter-side { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 1.6rem; }
 .meter-speed { display: flex; align-items: center; justify-content: space-between; }
 .meter-speed-line { display: flex; align-items: baseline; gap: 0.8rem; }
-.meter-speed-value { font-size: 5.6rem; font-weight: 600; line-height: 1; }
+.meter-speed-value { font-size: 6.4rem; font-weight: 600; line-height: 1; }
 .meter-speed-unit { font-size: 1.8rem; color: var(--sub); }
 
 .meter-speed-right { display: flex; align-items: center; gap: 1.2rem; }
