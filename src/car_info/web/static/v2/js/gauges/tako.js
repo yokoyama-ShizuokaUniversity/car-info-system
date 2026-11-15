@@ -1,5 +1,5 @@
 import { fmtInt } from "../items.js";
-import { bodyColor } from "./tako-color.js";
+import { bodyColor, coldColor } from "./tako-color.js";
 import { RED_RPM, angleOf, arcPath, polar, rpmOf } from "./common.js";
 
 // 上向きに伸びる足1本の形(これを回転させて8本並べる)
@@ -49,6 +49,15 @@ function buildSvg() {
         <text x="224" y="126" font-size="18">z</text>
         <text x="236" y="110" font-size="22">Z</text>
       </g>
+      <path class="tako-happy" d="M 158 180 Q 166 168 174 180"></path>
+      <path class="tako-happy" d="M 186 180 Q 194 168 202 180"></path>
+      <path class="tako-smile" d="M 171 198 Q 180 208 189 198"></path>
+      <text class="tako-note" x="238" y="146">♪</text>
+      <path class="tako-sweat" d="M 236 150 C 231 158 231 165 236 165 C 241 165 241 158 236 150 Z"></path>
+      <path class="tako-sweat" d="M 124 150 C 119 158 119 165 124 165 C 129 165 129 158 124 150 Z"></path>
+      <path class="tako-shock" d="M 152 116 L 158 126 M 180 108 L 180 120 M 208 116 L 202 126"></path>
+      <path class="tako-shiver" d="M 112 164 l -6 6 l 6 6 l -6 6 l 6 6"></path>
+      <path class="tako-shiver" d="M 248 164 l 6 6 l -6 6 l 6 6 l -6 6"></path>
       <text class="tako-rpm num" x="180" y="290">--</text>
       <text class="tako-rpm-unit" x="180" y="322">r/min</text>
     </svg>`;
@@ -74,7 +83,9 @@ export default {
     return {
       update(d) {
         const rpm = rpmOf(d);
-        const color = bodyColor(rpm);
+        // エコ運転の判定(レッドゾーンではゆでダコを優先する)
+        const mood = rpm >= RED_RPM ? null : d.eco_mood;
+        const color = mood === "cold" ? coldColor(bodyColor(rpm)) : bodyColor(rpm);
         const deg = angleOf(rpm);
 
         head.style.fill = color;
@@ -90,6 +101,9 @@ export default {
 
         el.classList.toggle("is-hot", rpm >= RED_RPM);
         el.classList.toggle("is-sleep", rpm < 50); // エンジン停止中は寝ている表示
+        el.classList.toggle("is-happy", mood === "happy"); // エコな運転:ご機嫌
+        el.classList.toggle("is-harsh", mood === "harsh"); // 急な操作:焦り
+        el.classList.toggle("is-cold", mood === "cold");   // 暖機中:寒がる
         rpmText.textContent = fmtInt(d.RPM);
       },
     };

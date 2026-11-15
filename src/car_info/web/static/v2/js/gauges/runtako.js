@@ -1,6 +1,6 @@
 import { fmtInt } from "../items.js";
 import { MAX_RPM, RED_RPM, rpmOf, zoneColor } from "./common.js";
-import { bodyColor } from "./tako-color.js";
+import { bodyColor, coldColor } from "./tako-color.js";
 
 const RPM_PER_FPS = 250; // 250rpmごとに1秒あたり1コマ
 const MAX_FPS = 32;      // コマ送りの上限
@@ -72,6 +72,11 @@ function buildSvg() {
         </g>
         <path class="run-hot-eye" d="M 208 155 L 218 162 L 208 169"></path>
         <path class="run-sleep-eye" d="M 205 162 Q 214 169 223 162"></path>
+        <path class="run-happy-eye" d="M 205 166 Q 214 154 223 166"></path>
+        <text class="run-note" x="252" y="126">♪</text>
+        <path class="run-shock" d="M 236 112 L 244 102 M 246 124 L 256 118"></path>
+        <path class="run-shiver" d="M 116 132 l -6 6 l 6 6 l -6 6 l 6 6"></path>
+        <path class="run-shiver" d="M 258 140 l 6 6 l -6 6 l 6 6 l -6 6"></path>
         <path class="run-sweat" d="M 132 114 C 128 120 128 126 132 126 C 136 126 136 120 132 114 Z"></path>
         <path class="run-sweat" d="M 146 96 C 142 102 142 108 146 108 C 150 108 150 102 146 96 Z"></path>
         <path class="run-steam" d="M 170 92 C 164 86 176 80 170 74 C 165 69 172 65 170 62"></path>
@@ -137,7 +142,9 @@ export default {
     return {
       update(d) {
         rpm = rpmOf(d);
-        const color = bodyColor(rpm);
+        // エコ運転の判定(レッドゾーンではゆでダコを優先する)
+        const mood = rpm >= RED_RPM ? null : d.eco_mood;
+        const color = mood === "cold" ? coldColor(bodyColor(rpm)) : bodyColor(rpm);
         skin.forEach((part) => { part.style.fill = color; });
         legs.forEach((leg) => { leg.style.stroke = color; });
 
@@ -148,6 +155,9 @@ export default {
         el.classList.toggle("is-fast", rpm >= 4000);
         el.classList.toggle("is-sweat", rpm >= 5500);
         el.classList.toggle("is-hot", rpm >= RED_RPM);
+        el.classList.toggle("is-happy", mood === "happy"); // エコな運転:ご機嫌
+        el.classList.toggle("is-harsh", mood === "harsh"); // 急な操作:焦り
+        el.classList.toggle("is-cold", mood === "cold");   // 暖機中:寒がる
         rpmText.textContent = fmtInt(d.RPM);
       },
       // メーターを切り替えるときにアニメーションを止める

@@ -138,3 +138,9 @@ body {
 .power-btn svg { width: 1.6rem; height: 1.6rem; }
 .power-message { margin: 0; font-size: 1.6rem; line-height: 1.6; }
 .close.danger { background: var(--hot); color: #000000; }
+/* 部品:エコ運転のアイコン(タコがいないメーターのとき) */
+.eco-icon { display: inline-block; width: 2.6rem; height: 2.6rem; opacity: 0; transition: opacity 0.3s; }
+.eco-icon.on { opacity: 1; }
+.eco-icon[data-mood="happy"] { color: var(--ok); }
+.eco-icon[data-mood="harsh"] { color: var(--bad); }
+.eco-icon[data-mood="cold"] { color: var(--good); }

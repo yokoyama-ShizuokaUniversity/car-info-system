@@ -11,3 +11,7 @@ export function bodyColor(rpm) {
   if (rpm < 4000) return lerpColor("#CFC0E3", "#F59AAE", rpm / 4000);
   return lerpColor("#F59AAE", "#FF5A45", Math.min(1, (rpm - 4000) / (RED_RPM - 4000)));
 }
+// 寒いとき(暖機中)の体の色:今の色を青っぽく寄せる
+export function coldColor(color) {
+  return lerpColor(color, "#8FB8FF", 0.6);
+}

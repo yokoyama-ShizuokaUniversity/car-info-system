@@ -2,6 +2,8 @@ import { fmt, fixedWidth, ITEMS } from "../items.js";
 import { createFuelGauge } from "../widgets/fuel.js";
 import { createChips } from "../widgets/chips.js";
 import { createIdleIcon } from "../widgets/idle-icon.js";
+import { createEcoIcon } from "../widgets/eco-icon.js";
+import { createEcoJudge } from "../logic/eco.js";
 import { loadSetting, saveSetting, onLongPress, openItemPicker } from "../settings.js";
 import tako from "../gauges/tako.js";
 import needle from "../gauges/needle.js";
@@ -11,6 +13,7 @@ import runtako from "../gauges/runtako.js";
 // メーターの種類(タップで順に切り替え)。増やすときは gauges/ に作ってここに追加する
 const GAUGES = [tako, needle, bargraph, runtako];
 const GAUGE_KEY = "car-info-gauge";
+const TAKO_GAUGES = ["tako", "runtako"]; // タコがいるメーター(エコ運転の判定は表情で出す)
 
 // 右下に並べる項目(右側を長押しで変更)
 const CHIPS_KEY = "car-info-v2-chips";
@@ -65,6 +68,8 @@ export default {
         </span>
       </div>`;
     const idle = createIdleIcon();
+    const eco = createEcoIcon();
+    const ecoJudge = createEcoJudge();
     speedRow.querySelector(".meter-speed-right").appendChild(idle.el);
     const fuel = createFuelGauge();
     let chipSetting = loadChips();
@@ -98,6 +103,7 @@ export default {
       gauge?.destroy?.(); // 前のメーターのアニメーションを止める
       gaugeBox.replaceChildren();
       gauge = GAUGES[index].mount(gaugeBox);
+      gaugeBox.appendChild(eco.el); // エコ運転のアイコンはメーターの左上に重ねる
       if (last) gauge.update(last);
     }
     gaugeBox.addEventListener("click", () => {
@@ -110,8 +116,12 @@ export default {
     return {
       update(d) {
         if (!d) return;
+        // エコ運転の判定を加えたデータを、メーターとアイコンに渡す
+        const mood = ecoJudge.update(d);
+        d = { ...d, eco_mood: mood };
         last = d;
         gauge.update(d);
+        eco.update(TAKO_GAUGES.includes(GAUGES[index].id) ? null : mood);
         speedValue.textContent = fixedWidth(d.gps_fix ? fmt(d.gps_speed, 0) : "--", 3);
         gpsValue.textContent = fixedWidth(fmt(d.SPEED, 0), 3);
         voltValue.textContent = fixedWidth(fmt(d.CONTROL_MODULE_VOLTAGE, 1), 4);
