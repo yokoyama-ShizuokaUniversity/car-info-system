@@ -12,7 +12,7 @@ from car_info import config
 from car_info.state import State
 
 # 記録しない項目(内部用の時刻や、別の名前で記録するもの)
-EXCLUDE_KEYS = {"obd_time", "obd_mono", "gps_rx_time", "gps_rx_mono", "gps_time"}
+EXCLUDE_KEYS = {"obd_time", "obd_mono", "gps_rx_time", "gps_rx_mono", "gps_time", "gps_sky"}
 GPS_FRESH_SEC = 1.0  # GPS時刻を受け取ってからこの秒数以内なら、その行の時刻として記録する
 TICK_SEC = 0.05      # 記録するかを判断する間隔 [秒]
 

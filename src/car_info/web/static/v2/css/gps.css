@@ -1,10 +1,54 @@
 .gps { display: flex; flex-direction: column; gap: 1rem; }
-.gps-cells { flex: 1; min-height: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+.gps-body { flex: 1; min-height: 0; display: flex; align-items: center; gap: 2.4rem; }
+
+/* 左:コンパス / 衛星の配置(タップで切り替え) */
+.gps-visual { position: relative; flex-shrink: 0; width: 30rem; max-height: 100%; aspect-ratio: 1; padding: 0; border: none; background: none; color: inherit; font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.gps-visual svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.gps-visual[data-view="compass"] .gv-sky, .gps-visual[data-view="sky"] .gv-compass { display: none; }
+.gv-caption { position: absolute; left: 0; bottom: -0.4rem; font-size: 1.3rem; color: var(--sub); white-space: nowrap; }
+
+.gv-ring { fill: none; stroke: var(--dot-off); stroke-width: 1; }
+.gv-ring.is-inner { stroke: var(--line); }
+.gv-axis { stroke: var(--line); stroke-width: 1; }
+.gv-tick { stroke: var(--dot-off); stroke-width: 1; }
+.gv-tick.is-major { stroke: var(--sub); stroke-width: 1.6; }
+.gv-dial { transform-origin: 0 0; transition: transform 0.4s ease-out; }
+.gv-cardinal { fill: var(--sub); font-size: 15px; text-anchor: middle; dominant-baseline: central; transform-box: fill-box; transform-origin: center; transition: transform 0.4s ease-out; }
+.gv-cardinal.is-north, .gv-sky-label.is-north { fill: var(--bad); font-weight: 600; }
+.gv-pointer { fill: var(--good); }
+.gv-dir { fill: var(--text); font-size: 28px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+.gv-deg { fill: var(--sub); font-size: 18px; text-anchor: middle; dominant-baseline: central; }
+
+.gv-sky-label { fill: var(--sub); font-size: 11px; text-anchor: middle; dominant-baseline: central; }
+.gv-elev { fill: var(--dot-off); font-size: 7px; }
+.gv-sat { fill: var(--bg); stroke: var(--c); stroke-width: 2; }
+.gv-sat.is-used { fill: var(--c); }
+.gv-prn { fill: var(--sub); font-size: 8px; }
+
+/* 右:縦にスワイプで切り替える2枚 */
+.gps-right { flex: 1; min-width: 0; height: 30rem; max-height: 100%; display: flex; gap: 0.8rem; }
+.gps-panes { flex: 1; min-width: 0; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; }
+.gps-panes::-webkit-scrollbar { display: none; }
+.gps-pane { height: 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+.gps-pane-dots { display: flex; flex-direction: column; justify-content: center; gap: 0.8rem; }
+.gps-pane-dots span { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--dot-off); }
+.gps-pane-dots span.active { background: var(--text); }
+
+/* 1枚目:数値 */
+.gps-cells { height: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
 .gps .cell { gap: 0.4rem; padding: 1.2rem 1.8rem; }
 .gps .cell-value { font-size: 4.4rem; }
 
-/* 進行方向のコンパス */
-.gps-heading { align-items: center; gap: 1.2rem; }
-.gps-compass { flex-shrink: 0; width: 4.4rem; height: 4.4rem; }
-.gps-compass circle { fill: none; stroke: var(--dot-off); stroke-width: 2; }
-.gps-needle { fill: var(--bad); transform-origin: 20px 20px; transition: transform 0.3s ease-out; }
+/* 2枚目:衛星ごとの信号強度 */
+.gps-snr { height: 100%; display: flex; flex-direction: column; gap: 1rem; padding: 1.2rem 1.8rem; border: 1px solid var(--line); border-radius: 1.2rem; }
+.gps-snr-head { display: flex; align-items: center; justify-content: space-between; }
+.gps-snr-legend { display: flex; align-items: center; gap: 0.6rem; font-size: 1.2rem; color: var(--sub); }
+.gps-snr-legend i { display: inline-block; width: 1rem; height: 1rem; margin-left: 0.8rem; border: 0.2rem solid var(--good); border-radius: 0.2rem; }
+.gps-snr-legend i.is-used { background: var(--good); }
+.gps-bars { flex: 1; min-height: 0; display: flex; gap: 0.8rem; }
+.gps-bar { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.gps-bar-value { font-size: 1.4rem; color: var(--sub); }
+.gps-bar-track { flex: 1; width: 100%; max-width: 3.2rem; display: flex; align-items: flex-end; border-radius: 0.4rem; background: var(--line); overflow: hidden; }
+.gps-bar-fill { width: 100%; border: 0.2rem solid var(--c); border-radius: 0.4rem; transition: height 0.3s; }
+.gps-bar.is-used .gps-bar-fill { background: var(--c); }
+.gps-bar-prn { font-size: 1.6rem; font-weight: 600; }

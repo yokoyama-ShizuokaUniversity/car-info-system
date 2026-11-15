@@ -10,6 +10,7 @@ OBD_BAUDRATE = 38400
 GPS_PORT = os.environ.get("CAR_GPS_PORT", "/dev/serial0")
 GPS_BAUD = 9600     # 受信機の通信速度
 GPS_RATE_HZ = 5     # 1秒あたりの更新回数(9600bpsなら5回まで)
+GPS_SLOW_EVERY = 5  # GGA・GSA・GSV(衛星の一覧)は、この回数に1回だけ出力する(1〜5。通信量を抑えるため)
 
 # 設定や走行データを保存する場所(環境変数で変更可)
 DATA_DIR = Path(os.environ.get("CAR_DATA_DIR", "~/car-data")).expanduser()

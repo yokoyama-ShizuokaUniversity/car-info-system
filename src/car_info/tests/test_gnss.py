@@ -35,3 +35,22 @@ def test_チェックサムが不正():
 def test_チェックサムの計算():
     body = "GPRMC,123519,A,4807.038,N,01131.000,E,022.4,084.4,230394,003.1,W"
     assert nmea_sentence(body) == RMC
+
+def test_衛星の一覧():
+    from car_info.gnss.reader import SkyCollector
+    sky = SkyCollector()
+    lines = [
+        nmea_sentence("GPGSA,A,3,10,07,05,,,,,,,,,,1.72,1.03,1.38"),
+        nmea_sentence("GPGSV,2,1,05,10,63,137,17,07,61,098,15,05,59,290,20,08,54,157,30"),
+        nmea_sentence("GPGSV,2,2,05,13,06,292,"),
+    ]
+    results = [parse_line(line, sky) for line in lines]
+    assert results[0] == {} and results[1] == {}  # GSVがそろうまでは書き込まない
+    sats = results[2]["gps_sky"]
+    assert [s["prn"] for s in sats] == [5, 7, 8, 10, 13]
+    assert sats[3] == {"prn": 10, "elev": 63, "az": 137, "snr": 17, "used": True}
+    assert sats[4] == {"prn": 13, "elev": 6, "az": 292, "snr": None, "used": False}
+
+
+def test_衛星の一覧を渡さないときは無視する():
+    assert parse_line(nmea_sentence("GPGSV,1,1,01,10,63,137,17")) == {}
