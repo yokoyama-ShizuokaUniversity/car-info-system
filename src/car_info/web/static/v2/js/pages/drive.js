@@ -32,8 +32,13 @@ function dialSvg() {
     const r1 = DIAL_R - (major ? 10 : 5);
     s += `<line class="drive-tick${major ? " is-major" : ""}" x1="0" y1="${-DIAL_R}" x2="0" y2="${-r1}" transform="rotate(${deg})"></line>`;
   }
+  // 方位の文字は、盤が回っても常に正立させる(位置だけ盤と一緒に回る)
   ["北", "東", "南", "西"].forEach((name, i) => {
-    s += `<text class="drive-cardinal${i === 0 ? " is-north" : ""}" x="0" y="${-DIAL_R + 24}" transform="rotate(${i * 90})">${name}</text>`;
+    const rad = (i * 90 * Math.PI) / 180;
+    const r = DIAL_R - 24;
+    const x = Math.round(Math.sin(rad) * r);
+    const y = Math.round(-Math.cos(rad) * r);
+    s += `<text class="drive-cardinal${i === 0 ? " is-north" : ""}" x="${x}" y="${y}">${name}</text>`;
   });
   return s;
 }
@@ -101,6 +106,7 @@ export default {
 
     const q = (s) => el.querySelector(s);
     const dial = q(".drive-dial");
+    const cardinals = el.querySelectorAll(".drive-cardinal");
     const dot = q(".accel-dot");
     const trailLine = q(".accel-trail");
     let trail = [];       // { t, x, y }
@@ -116,6 +122,7 @@ export default {
         dialAngle += diff;
       }
       dial.style.transform = `rotate(${dialAngle}deg)`;
+      cardinals.forEach((t) => { t.style.transform = `rotate(${-dialAngle}deg)`; });
     }
 
     function updateCompass(d) {
