@@ -38,3 +38,9 @@ LOG_MIN_FREE_MB = 500   # 空き容量がこれを下回ったら古いファイ
 # アクセル開度の生の値の範囲(実車で計測:離したとき・踏み切ったとき)
 ACCEL_RAW_MIN = 16.0
 ACCEL_RAW_MAX = 66.0
+
+# 加速度センサー(MMA8452Q)の接続設定
+ACCEL_I2C_BUS = 1
+ACCEL_I2C_ADDR = 0x1D
+ACCEL_HZ = 50       # センサーを読む回数 [回/秒]
+ACCEL_OUT_HZ = 10   # stateに書き込む回数 [回/秒](その間の平均を書き込む)

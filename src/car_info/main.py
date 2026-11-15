@@ -13,6 +13,7 @@ from car_info.state import State
 from car_info.web.server import create_app
 from car_info.recorder import DataRecorder
 from car_info.obd2.pedal import calc_pedal
+from car_info.accel.reader import AccelReader
 
 def redirect_app() -> FastAPI:
     """HTTPで来たアクセスを、HTTPSの同じページへ転送する"""
@@ -60,6 +61,7 @@ def main():
         return result
     ObdReader(state, on_cycle=on_cycle).start()
     GnssReader(state).start()
+    AccelReader(state).start()
     DataRecorder(state).start()
 
     # Webサーバーの起動は最後に(ここでプログラムが動き続け、次の行には進まない)
